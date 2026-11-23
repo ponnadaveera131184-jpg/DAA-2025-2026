@@ -1,0 +1,63 @@
+
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+int minCoins(vector<int>& coins, int amount) {
+    vector<int> dp(amount + 1, INT_MAX);
+
+    dp[0] = 0;
+
+    for (int i = 1; i <= amount; i++) {
+        for (int coin : coins) {
+            if (coin <= i && dp[i - coin] != INT_MAX) {
+                dp[i] = min(dp[i], dp[i - coin] + 1);
+            }
+        }
+    }
+
+    return dp[amount];
+}
+
+int main() {
+    int n, amount;
+
+    cout << "Enter number of coins: ";
+    cin >> n;
+
+    if (n <= 0) {
+        cout << "Invalid number of coins!";
+        return 0;
+    }
+
+    vector<int> coins(n);
+
+    cout << "Enter coin denominations: ";
+    for (int i = 0; i < n; i++) {
+        cin >> coins[i];
+
+        if (coins[i] <= 0) {
+            cout << "Invalid coin denomination!";
+            return 0;
+        }
+    }
+
+    cout << "Enter amount: ";
+    cin >> amount;
+
+    if (amount < 0) {
+        cout << "Invalid amount!";
+        return 0;
+    }
+
+    int result = minCoins(coins, amount);
+
+    if (result == INT_MAX) {
+        cout << "Change cannot be made!" << endl;
+    } else {
+        cout << "Minimum coins required: " << result << endl;
+    }
+
+    return 0;
+}
